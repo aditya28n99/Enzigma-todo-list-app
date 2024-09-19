@@ -1,9 +1,9 @@
-import './App.css';
+import './index.css';
 
 function App() {
   return (
     <>
-    <h1>Hello react!!</h1>
+    <h1 className='text-red-500'>Hello react!!</h1>
     </>
   );
 }

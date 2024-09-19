@@ -2,5 +2,7 @@
 
 ## Project Setup
 
-1. **Initialize the React project**:
+**Initialize the React project**
+- Installed & configuring Tailwind CSS and react-icons setup.
+
 
