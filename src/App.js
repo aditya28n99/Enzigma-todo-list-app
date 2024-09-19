@@ -1,3 +1,4 @@
+import Button from './components/button';
 import './index.css';
 
 import { FcRefresh } from "react-icons/fc";
@@ -9,10 +10,10 @@ const Header = () => (
       <h1 className="text-xl font-semibold">Tasks</h1>
     </div>
     <div className="flex space-x-4">
-      <button>New Task</button>
-      <button>
+      <Button variant={'primary'} children={'New Task'} />
+      <Button variant={'ghost'}>
         <FcRefresh />
-      </button>
+      </Button>
     </div>
   </header>
 );
