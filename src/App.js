@@ -2,6 +2,8 @@ import Button from './components/button';
 import './index.css';
 
 import { FcRefresh } from "react-icons/fc";
+import { BsSearch } from "react-icons/bs";
+
 
 const Header = () => (
   <header className="flex justify-between items-center p-4 border-2 bg-gray-100">
@@ -18,11 +20,31 @@ const Header = () => (
   </header>
 );
 
+const StripHeader = ({ taskCount, searchValue }) => (
+  <div className="flex justify-between items-center p-5 border-b">
+    <div className="text-lg font-medium">
+      {taskCount} {`Record${taskCount !== 1 ? 's' : ''}`}
+    </div>
+    <div className="flex items-center w-[275px] border bg-gray-100 text-gray-500 rounded">
+      <input
+        type="text"
+        value={searchValue}
+        placeholder="Search Tasks"
+        className="flex-grow p-2 outline-none bg-gray-100 text-gray-500 rounded-l"
+      />
+      <div className="p-2">
+       <Button variant={'ghost'}><BsSearch className="text-gray-500" /></Button> 
+      </div>
+    </div>
+  </div>
+);
+
 function App() {
 
   return (
     <>
       <Header />
+      <StripHeader taskCount={5}/>
     </>
   );
 }
