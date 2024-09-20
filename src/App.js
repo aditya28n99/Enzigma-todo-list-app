@@ -44,7 +44,7 @@ const StripHeader = ({ taskCount, searchValue }) => (
   </div>
 );
 
-const TaskList = () => {
+const TaskList = ({taskToDisplay}) => {
   const [openDropdown, setOpenDropdown] = useState(null);
 
   const toggleDropdown = (taskId) => {
@@ -65,8 +65,8 @@ const TaskList = () => {
         </tr>
       </thead>
       <tbody>
-        {sampleTasks.length > 0 ? (
-          sampleTasks.map((task, index) => (
+        {taskToDisplay.length > 0 ? (
+          taskToDisplay.map((task, index) => (
             <tr key={index} className="hover:bg-gray-50 border-b">
               <td className="py-2 px-4">
                 <input
@@ -114,48 +114,69 @@ const TaskList = () => {
   );
 };
 
-const Pagination = ({currentPage, totalPages}) => {
+const Pagination = ({currentPage, totalPages, changePage}) => {
+
+  // const [changePage, setChangePage] = useState(1)
+
+  const onlyFisrtPage = () =>{
+    changePage(1);
+  }
+  const onlyLastPage = () =>{
+    changePage(totalPages);
+  }
 
   return (
     <div className="flex justify-center mt-4">
-      <button
+      <Button
+        className="px-4 py-1 mx-1 border rounded text-gray-600 bg-gray-200"
+        children={'First'}
+        onClick={onlyFisrtPage}
+      />
+      <Button
         className="px-3 py-1 mx-1 border rounded text-gray-600 bg-gray-200"
-      >
-        First
-      </button>
-      <button
-        className="px-3 py-1 mx-1 border rounded text-gray-600 bg-gray-200"
-      >
-        Prev
-      </button>
+        size={'small'}
+        children={'Prev'}
+      />
       <span className="px-3 py-1 mx-1 border rounded text-gray-600 bg-white">
         Page {currentPage} of {totalPages}
       </span>
-      <button
+      <Button
         className="px-3 py-1 mx-1 border rounded text-gray-600 bg-gray-200"
-      >
-        Next
-      </button>
-      <button
-        className="px-3 py-1 mx-1 border rounded text-gray-600 bg-gray-200"
-      >
-        Last
-      </button>
+        size={'small'}
+        children={'Next'}
+      />
+      <Button
+        className="px-4 py-1 mx-1 border rounded text-gray-600 bg-gray-200"
+        children={'Last'}
+        onClick={onlyLastPage}
+      />
     </div>
   );
 };
 
 function App() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const tasksPerPage = 14;
 
+  const totalPages = Math.ceil(sampleTasks.length / tasksPerPage);
+
+  const handleChangePage = (activePage) => {
+    setCurrentPage(activePage);
+  }
+
+  const taskToDisplay = sampleTasks.slice(
+    (currentPage - 1) * tasksPerPage,
+    currentPage * tasksPerPage
+  );
   return (
-    <div className=''>
+    <div className='box-border'>
       <div className='sticky top-0'>
       <Header />
       </div>
-      <StripHeader taskCount={5}/>
-      <TaskList/>
-      <div className='fixed bottom-0 p-4 border-2 w-full bg-slate-300 border-t'>
-      <Pagination currentPage={1} totalPages={20}/>
+      <StripHeader taskCount={sampleTasks.length}/>
+      <TaskList taskToDisplay={taskToDisplay}/>
+      <div className='fixed bottom-0 p-3 border-2 w-full bg-slate-300 border-t'>
+      <Pagination currentPage={currentPage} totalPages={totalPages} changePage={handleChangePage}/>
       </div>
     </div>
   );
