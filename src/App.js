@@ -26,7 +26,7 @@ const Header = () => (
 );
 
 const StripHeader = ({ taskCount, searchValue }) => (
-  <div className="flex justify-between items-center p-5 border-b">
+  <div className="flex justify-between items-center p-4 border-b">
     <div className="text-lg font-medium">
       {taskCount} {`Record${taskCount !== 1 ? 's' : ''}`}
     </div>
@@ -35,7 +35,7 @@ const StripHeader = ({ taskCount, searchValue }) => (
         type="text"
         value={searchValue}
         placeholder="Search Tasks"
-        className="flex-grow p-2 outline-none bg-gray-100 text-gray-500 rounded-l"
+        className="flex-grow px-4 outline-none bg-gray-100 text-gray-500 rounded-l"
       />
       <div className="p-2">
        <Button variant={'ghost'}><BsSearch className="text-gray-500" /></Button> 
@@ -45,10 +45,10 @@ const StripHeader = ({ taskCount, searchValue }) => (
 );
 
 const TaskList = () => {
-  const [openDropdown, setOpenDropdown] = useState(null); // Track which dropdown is open
+  const [openDropdown, setOpenDropdown] = useState(null);
 
   const toggleDropdown = (taskId) => {
-    setOpenDropdown(openDropdown === taskId ? null : taskId); // Toggle dropdown
+    setOpenDropdown(openDropdown === taskId ? null : taskId);
   };
 
   return (
@@ -114,14 +114,50 @@ const TaskList = () => {
   );
 };
 
+const Pagination = ({currentPage, totalPages}) => {
+
+  return (
+    <div className="flex justify-center mt-4">
+      <button
+        className="px-3 py-1 mx-1 border rounded text-gray-600 bg-gray-200"
+      >
+        First
+      </button>
+      <button
+        className="px-3 py-1 mx-1 border rounded text-gray-600 bg-gray-200"
+      >
+        Prev
+      </button>
+      <span className="px-3 py-1 mx-1 border rounded text-gray-600 bg-white">
+        Page {currentPage} of {totalPages}
+      </span>
+      <button
+        className="px-3 py-1 mx-1 border rounded text-gray-600 bg-gray-200"
+      >
+        Next
+      </button>
+      <button
+        className="px-3 py-1 mx-1 border rounded text-gray-600 bg-gray-200"
+      >
+        Last
+      </button>
+    </div>
+  );
+};
+
 function App() {
 
   return (
-    <>
+    <div className=''>
+      <div className='sticky top-0'>
       <Header />
+      </div>
       <StripHeader taskCount={5}/>
       <TaskList/>
-    </>
+      <div className='fixed bottom-0 p-4 border-2 w-full bg-slate-300 border-t'>
+      <Pagination currentPage={1} totalPages={20}/>
+      </div>
+    </div>
   );
 }
 
