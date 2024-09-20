@@ -25,7 +25,7 @@ const Header = () => (
   </header>
 );
 
-const StripHeader = ({ taskCount, searchValue }) => (
+const StripHeader = ({ taskCount, searchValue, setSearchValue, onSearch }) => (
   <div className="flex justify-between items-center p-4 border-b">
     <div className="text-lg font-medium">
       {taskCount} {`Record${taskCount !== 1 ? 's' : ''}`}
@@ -34,17 +34,18 @@ const StripHeader = ({ taskCount, searchValue }) => (
       <input
         type="text"
         value={searchValue}
+        onChange={(e) => setSearchValue(e.target.value)}
         placeholder="Search Tasks"
         className="flex-grow px-4 outline-none bg-gray-100 text-gray-500 rounded-l"
       />
       <div className="p-2">
-       <Button variant={'ghost'}><BsSearch className="text-gray-500" /></Button> 
+        <Button variant={'ghost'} onClick={onSearch}><BsSearch className="text-gray-500" /></Button>
       </div>
     </div>
   </div>
 );
 
-const TaskList = ({taskToDisplay}) => {
+const TaskList = ({ taskToDisplay }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
 
   const toggleDropdown = (taskId) => {
@@ -114,20 +115,20 @@ const TaskList = ({taskToDisplay}) => {
   );
 };
 
-const Pagination = ({currentPage, totalPages, changePage}) => {
+const Pagination = ({ currentPage, totalPages, changePage }) => {
 
   // const [changePage, setChangePage] = useState(1)
 
-  const onlyFisrtPage = () =>{
+  const onlyFisrtPage = () => {
     changePage(1);
   }
-  const onlyLastPage = () =>{
+  const onlyLastPage = () => {
     changePage(totalPages);
   }
-  const toPrevPage = () =>{
+  const toPrevPage = () => {
     changePage(currentPage > 0 ? currentPage - 1 : 0);
   }
-  const toNextPage = () =>{
+  const toNextPage = () => {
     changePage(currentPage === totalPages ? currentPage : currentPage + 1);
   }
 
@@ -164,27 +165,43 @@ const Pagination = ({currentPage, totalPages, changePage}) => {
 
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchValue, setSearchValue] = useState('');
+  const [filteredTasks, setFilteredTasks] = useState(sampleTasks);
+
   const tasksPerPage = 14;
 
   const totalPages = Math.ceil(sampleTasks.length / tasksPerPage);
-
-  const handleChangePage = (activePage) => {
-    setCurrentPage(activePage);
-  }
 
   const taskToDisplay = sampleTasks.slice(
     (currentPage - 1) * tasksPerPage,
     currentPage * tasksPerPage
   );
+
+  const handleChangePage = (activePage) => {
+    setCurrentPage(activePage);
+  }
+
+  const handleSearch = () => {
+    const searchResults = sampleTasks.filter(task =>
+      task.assignedTo.toLowerCase().includes(searchValue.toLowerCase()) ||
+      task.comments.toLowerCase().includes(searchValue.toLowerCase())
+    );
+    setFilteredTasks(searchResults);
+  };
+
   return (
     <div className='box-border'>
       <div className='sticky top-0'>
-      <Header />
+        <Header />
       </div>
-      <StripHeader taskCount={sampleTasks.length}/>
-      <TaskList taskToDisplay={taskToDisplay}/>
+      <StripHeader taskCount={filteredTasks.length}
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+        onSearch={handleSearch}
+      />
+      <TaskList taskToDisplay={taskToDisplay} />
       <div className='fixed bottom-0 p-3 border-2 w-full bg-slate-300 border-t'>
-      <Pagination currentPage={currentPage} totalPages={totalPages} changePage={handleChangePage}/>
+        <Pagination currentPage={currentPage} totalPages={totalPages} changePage={handleChangePage} />
       </div>
     </div>
   );
