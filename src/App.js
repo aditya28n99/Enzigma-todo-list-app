@@ -124,6 +124,12 @@ const Pagination = ({currentPage, totalPages, changePage}) => {
   const onlyLastPage = () =>{
     changePage(totalPages);
   }
+  const toPrevPage = () =>{
+    changePage(currentPage > 0 ? currentPage - 1 : 0);
+  }
+  const toNextPage = () =>{
+    changePage(currentPage === totalPages ? currentPage : currentPage + 1);
+  }
 
   return (
     <div className="flex justify-center mt-4">
@@ -136,6 +142,7 @@ const Pagination = ({currentPage, totalPages, changePage}) => {
         className="px-3 py-1 mx-1 border rounded text-gray-600 bg-gray-200"
         size={'small'}
         children={'Prev'}
+        onClick={toPrevPage}
       />
       <span className="px-3 py-1 mx-1 border rounded text-gray-600 bg-white">
         Page {currentPage} of {totalPages}
@@ -144,6 +151,7 @@ const Pagination = ({currentPage, totalPages, changePage}) => {
         className="px-3 py-1 mx-1 border rounded text-gray-600 bg-gray-200"
         size={'small'}
         children={'Next'}
+        onClick={toNextPage}
       />
       <Button
         className="px-4 py-1 mx-1 border rounded text-gray-600 bg-gray-200"
