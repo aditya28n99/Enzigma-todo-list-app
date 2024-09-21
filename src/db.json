@@ -1,0 +1,36 @@
+{
+  "sampleTasks": [
+    {
+      "id": 1,
+      "assignedTo": "user 1",
+      "status": "Pending",
+      "dueDate": "12/10/2024",
+      "priority": "High",
+      "comments": "Review needed"
+    },
+    {
+      "id": 2,
+      "assignedTo": "user 2",
+      "status": "In Progress",
+      "dueDate": "12/11/2024",
+      "priority": "Medium",
+      "comments": "Awaiting feedback"
+    },
+    {
+      "id": 3,
+      "assignedTo": "user 3",
+      "status": "Completed",
+      "dueDate": "12/12/2024",
+      "priority": "Low",
+      "comments": "Task finished successfully"
+    },
+    {
+      "id": 4,
+      "assignedTo": "user 4",
+      "status": "Pending",
+      "dueDate": "12/13/2024",
+      "priority": "High",
+      "comments": "Needs urgent attention"
+    }
+  ]
+}

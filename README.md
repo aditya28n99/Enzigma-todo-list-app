@@ -46,4 +46,12 @@
 ### JSON Server Integration
 - Installed JSON Server as a development dependency.
 - Added a Script to run the server - `npm run json-server`
+- Installed `axios`
+- Configured JSON server for mock backend. - `http://localhost:5000/sampleTasks`
+
+**JSON Server Setup:**
+- To run the JSON server, use:
+  ```bash
+`npx json-server --watch src/db.json --port 5000`
+- npm run start-server
 

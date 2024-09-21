@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Button from './components/button';
 import './index.css';
@@ -8,7 +8,7 @@ import { BsSearch } from "react-icons/bs";
 
 import { BsThreeDotsVertical } from 'react-icons/bs';
 
-import { sampleTasks } from './db';
+import { fetchTasks } from './Services/taskServices'
 
 const Header = () => (
   <header className="flex w-full justify-between items-center p-4 border-b-2 bg-gray-100">
@@ -166,11 +166,25 @@ const Pagination = ({ currentPage, totalPages, changePage }) => {
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState('');
-  const [filteredTasks, setFilteredTasks] = useState(sampleTasks);
+  const [filteredTasks, setFilteredTasks] = useState([]);
+  const [fetchedTasks, setFetchedTasks] = useState([]);
 
   const tasksPerPage = 20;
+const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
 
-  const totalPages = Math.ceil(sampleTasks.length / tasksPerPage);
+  useEffect(() => {
+    const getTasks = async () => {
+      try {
+        const tasks = await fetchTasks();
+        setFetchedTasks(tasks);
+        setFilteredTasks(tasks);
+      } catch (error) {
+        console.log('Failed to fetch tasks.');
+      }
+    };
+
+    getTasks();
+  }, []);
 
   const taskToDisplay = filteredTasks.slice(
     (currentPage - 1) * tasksPerPage,
@@ -179,14 +193,19 @@ function App() {
 
   const handleChangePage = (activePage) => {
     setCurrentPage(activePage);
-  }
+  };
 
   const handleSearch = () => {
-    const searchResults = sampleTasks.filter(task =>
-      task.assignedTo.toLowerCase().includes(searchValue.toLowerCase()) ||
-      task.comments.toLowerCase().includes(searchValue.toLowerCase())
-    );
-    setFilteredTasks(searchResults);
+    if (searchValue.trim() === '') {
+      setFilteredTasks(fetchedTasks);
+    } else {
+      const searchResults = fetchedTasks.filter(task =>
+        task.assignedTo.toLowerCase().includes(searchValue.toLowerCase()) ||
+        task.comments.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      setFilteredTasks(searchResults);
+    }
+    setCurrentPage(1);
   };
 
   return (
@@ -195,12 +214,12 @@ function App() {
         <Header />
       </div>
       <div className="flex-grow overflow-y-auto">
-      <StripHeader taskCount={filteredTasks.length}
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
-        onSearch={handleSearch}
+        <StripHeader taskCount={filteredTasks.length} 
+          searchValue={searchValue} 
+          setSearchValue={setSearchValue} 
+          onSearch={handleSearch} 
         />
-      <TaskList taskToDisplay={taskToDisplay} />
+        <TaskList taskToDisplay={taskToDisplay} />
       </div>
       <div className='fixed bottom-0 p-2 border-t-2 w-full bg-gray-100'>
         <Pagination currentPage={currentPage} totalPages={totalPages} changePage={handleChangePage} />
