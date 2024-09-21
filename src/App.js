@@ -172,7 +172,7 @@ function App() {
 
   const totalPages = Math.ceil(sampleTasks.length / tasksPerPage);
 
-  const taskToDisplay = sampleTasks.slice(
+  const taskToDisplay = filteredTasks.slice(
     (currentPage - 1) * tasksPerPage,
     currentPage * tasksPerPage
   );
