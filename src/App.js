@@ -11,7 +11,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { sampleTasks } from './db';
 
 const Header = () => (
-  <header className="flex justify-between items-center p-4 border-2 bg-gray-100">
+  <header className="flex w-full justify-between items-center p-4 border-b-2 bg-gray-100">
     <div className="flex items-center h-[55px] overflow-hidden p-2">
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUnk0Pdm1QoRzmOVTJdG4bCA0QzG0gxbhMFg&s" alt="Logo" className="h-full w-auto object-cover mr-2" />
       <h1 className="text-xl font-semibold">Tasks</h1>
@@ -26,21 +26,19 @@ const Header = () => (
 );
 
 const StripHeader = ({ taskCount, searchValue, setSearchValue, onSearch }) => (
-  <div className="flex justify-between items-center p-4 border-b">
+  <div className="flex sticky top-0 justify-between items-center p-4 border-b bg-gray-200 z-10">
     <div className="text-lg font-medium">
       {taskCount} {`Record${taskCount !== 1 ? 's' : ''}`}
     </div>
-    <div className="flex items-center w-[275px] border bg-gray-100 text-gray-500 rounded">
+    <div className="flex items-center border bg-gray-100 text-gray-500 gap-2 rounded">
       <input
         type="text"
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
         placeholder="Search Tasks"
-        className="flex-grow px-4 outline-none bg-gray-100 text-gray-500 rounded-l"
+        className="flex-grow outline-none pl-2 bg-gray-100 text-gray-500 rounded-l"
       />
-      <div className="p-2">
         <Button variant={'ghost'} onClick={onSearch}><BsSearch className="text-gray-500" /></Button>
-      </div>
     </div>
   </div>
 );
@@ -53,9 +51,10 @@ const TaskList = ({ taskToDisplay }) => {
   };
 
   return (
-    <table className="min-w-full bg-white border border-gray-200">
+    <div className='overflow-x-auto'>
+    <table className="scroll-mx-1 bg-white border border-gray-200 w-full">
       <thead>
-        <tr className="w-full text-left bg-gray-100">
+        <tr className="w-full text-left bg-sky-100 text-blue-800">
           <th className="py-2 px-4">Select</th>
           <th className="py-2 px-4">Assigned To</th>
           <th className="py-2 px-4">Status</th>
@@ -73,9 +72,9 @@ const TaskList = ({ taskToDisplay }) => {
                 <input
                   type="checkbox"
                   className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
+                  />
               </td>
-              <td className="py-2 px-4">{task.assignedTo}</td>
+              <td className="py-2 px-4 text-blue-500">{task.assignedTo}</td>
               <td className="py-2 px-4">{task.status}</td>
               <td className="py-2 px-4">{task.dueDate}</td>
               <td className="py-2 px-4">{task.priority}</td>
@@ -93,11 +92,11 @@ const TaskList = ({ taskToDisplay }) => {
                     <Button
                       className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 m-2"
                       children={'edit'}
-                    />
+                      />
                     <Button
                       className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 m-2"
                       children={'Delet'}
-                    />
+                      />
                   </div>
                 )}
               </td>
@@ -112,13 +111,14 @@ const TaskList = ({ taskToDisplay }) => {
         )}
       </tbody>
     </table>
+</div>
   );
 };
 
 const Pagination = ({ currentPage, totalPages, changePage }) => {
 
   // const [changePage, setChangePage] = useState(1)
-
+  
   const onlyFisrtPage = () => {
     changePage(1);
   }
@@ -135,27 +135,27 @@ const Pagination = ({ currentPage, totalPages, changePage }) => {
   return (
     <div className="flex justify-center mt-4">
       <Button
-        className="px-4 py-1 mx-1 border rounded text-gray-600 bg-gray-200"
+        className="mx-1 border rounded text-gray-600 bg-gray-200"
         children={'First'}
         onClick={onlyFisrtPage}
       />
       <Button
-        className="px-3 py-1 mx-1 border rounded text-gray-600 bg-gray-200"
+        className="mx-1 border rounded text-gray-600 bg-gray-200"
         size={'small'}
         children={'Prev'}
         onClick={toPrevPage}
       />
-      <span className="px-3 py-1 mx-1 border rounded text-gray-600 bg-white">
+      <span className="mx-1 px-2 border rounded text-gray-600 bg-white">
         Page {currentPage} of {totalPages}
       </span>
       <Button
-        className="px-3 py-1 mx-1 border rounded text-gray-600 bg-gray-200"
+        className="mx-1 border rounded text-gray-600 bg-gray-200"
         size={'small'}
         children={'Next'}
         onClick={toNextPage}
       />
       <Button
-        className="px-4 py-1 mx-1 border rounded text-gray-600 bg-gray-200"
+        className="mx-1 border rounded text-gray-600 bg-gray-200"
         children={'Last'}
         onClick={onlyLastPage}
       />
@@ -168,7 +168,7 @@ function App() {
   const [searchValue, setSearchValue] = useState('');
   const [filteredTasks, setFilteredTasks] = useState(sampleTasks);
 
-  const tasksPerPage = 14;
+  const tasksPerPage = 20;
 
   const totalPages = Math.ceil(sampleTasks.length / tasksPerPage);
 
@@ -190,17 +190,19 @@ function App() {
   };
 
   return (
-    <div className='box-border'>
+    <div className='box-border h-screen flex flex-col'>
       <div className='sticky top-0'>
         <Header />
       </div>
+      <div className="flex-grow overflow-y-auto">
       <StripHeader taskCount={filteredTasks.length}
         searchValue={searchValue}
         setSearchValue={setSearchValue}
         onSearch={handleSearch}
-      />
+        />
       <TaskList taskToDisplay={taskToDisplay} />
-      <div className='fixed bottom-0 p-3 border-2 w-full bg-slate-300 border-t'>
+      </div>
+      <div className='fixed bottom-0 p-2 border-t-2 w-full bg-gray-100'>
         <Pagination currentPage={currentPage} totalPages={totalPages} changePage={handleChangePage} />
       </div>
     </div>
