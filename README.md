@@ -1,6 +1,13 @@
 # To-Do List Application
 
 ## Project Setup
+- run the - npm start
+
+## **JSON Server Setup:**
+- To run the JSON server, use:
+  ```bash
+npx json-server --watch src/db.json --port 5000
+- npm run start-server
 
 **Initialize the React project**
 - Installed & configuring Tailwind CSS and react-icons setup.
@@ -48,10 +55,8 @@
 - Added a Script to run the server - `npm run json-server`
 - Installed `axios`
 - Configured JSON server for mock backend. - `http://localhost:5000/sampleTasks`
+- Updated db.Json with 40 dummy data.
 
-**JSON Server Setup:**
-- To run the JSON server, use:
-  ```bash
-`npx json-server --watch src/db.json --port 5000`
-- npm run start-server
+### Task Form Component Initialization
+- created TaskForm component and added a toggle funtion on the basis on conditional rendering.
 

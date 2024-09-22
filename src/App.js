@@ -44,7 +44,7 @@ const StripHeader = ({ taskCount, searchValue, setSearchValue, onSearch }) => (
   </div>
 );
 
-const TaskList = ({ taskToDisplay }) => {
+const TaskList = ({ taskToDisplay, onEdit, onDelete }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
 
   const toggleDropdown = (taskId) => {
@@ -93,10 +93,12 @@ const TaskList = ({ taskToDisplay }) => {
                     <Button
                       className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 m-2"
                       children={'edit'}
+                      onClick={() => onEdit(task)}
                       />
                     <Button
                       className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 m-2"
                       children={'Delet'}
+                      onClick={() => onDelete(task)}
                       />
                   </div>
                 )}
@@ -169,10 +171,12 @@ function App() {
   const [searchValue, setSearchValue] = useState('');
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [fetchedTasks, setFetchedTasks] = useState([]);
-  const [toggleTaskForm, setToggleTaskForm] = useState(false);
+  const [isTaskFormOpen, setIsTaskFormOpen] = useState(false);
+  const [formType, setFormType] = useState('Create'); 
+  const [selectedTask, setSelectedTask] = useState(null);
 
   const tasksPerPage = 20;
-const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
+  const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
 
   useEffect(() => {
     const getTasks = async () => {
@@ -210,14 +214,16 @@ const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
     setCurrentPage(1);
   };
 
-  const toggleForm = () => {
-    setToggleTaskForm(!toggleTaskForm);
+  const toggleForm = (type = 'Create', task = null) => {
+    setFormType(type);
+    setSelectedTask(task);
+    setIsTaskFormOpen(!isTaskFormOpen);
   };
 
   return (
     <div className='box-border h-screen flex flex-col'>
       <div className='sticky top-0 z-10'>
-        <Header toggleForm={toggleForm} />
+        <Header toggleForm={() => toggleForm('Create')} />
       </div>
       <div className="flex-grow overflow-y-auto">
         <StripHeader taskCount={filteredTasks.length} 
@@ -226,16 +232,25 @@ const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
           onSearch={handleSearch} 
         />
       <div className="relative">
-        <TaskList taskToDisplay={taskToDisplay} />
+        <TaskList 
+          taskToDisplay={taskToDisplay} 
+          onEdit={(task) => toggleForm('Edit', task)} 
+          onDelete={(task) => toggleForm('Delete', task)} 
+        />
       </div>
       </div>
       <div className='bottom-0 left-0 right-0 p-2 border-t-2 w-full bg-gray-100'>
         <Pagination currentPage={currentPage} totalPages={totalPages} changePage={handleChangePage} />
       </div>
-      {toggleTaskForm && (
-      <div className='flex items-center justify-center absolute inset-0 m-auto'>
-      <TaskForm toggleForm={toggleForm}/>
-      </div>
+
+      {isTaskFormOpen && (
+        <div className='flex items-center justify-center absolute inset-0 m-auto'>
+          <TaskForm 
+            formType={formType} 
+            toggleForm={() => setIsTaskFormOpen(false)} 
+            initialTaskData={selectedTask} 
+          />
+        </div>
       )}
     </div>
   );
