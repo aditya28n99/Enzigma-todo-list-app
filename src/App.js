@@ -9,15 +9,16 @@ import { BsSearch } from "react-icons/bs";
 import { BsThreeDotsVertical } from 'react-icons/bs';
 
 import { fetchTasks } from './Services/taskServices'
+import TaskForm from './components/taskForm';
 
-const Header = () => (
+const Header = ({toggleForm}) => (
   <header className="flex w-full justify-between items-center p-4 border-b-2 bg-gray-100">
     <div className="flex items-center h-[55px] overflow-hidden p-2">
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUnk0Pdm1QoRzmOVTJdG4bCA0QzG0gxbhMFg&s" alt="Logo" className="h-full w-auto object-cover mr-2" />
       <h1 className="text-xl font-semibold">Tasks</h1>
     </div>
     <div className="flex space-x-4">
-      <Button variant={'primary'} children={'New Task'} />
+      <Button variant={'primary'} children={'New Task'} onClick={toggleForm} />
       <Button variant={'ghost'}>
         <FcRefresh />
       </Button>
@@ -168,6 +169,7 @@ function App() {
   const [searchValue, setSearchValue] = useState('');
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [fetchedTasks, setFetchedTasks] = useState([]);
+  const [toggleTaskForm, setToggleTaskForm] = useState(false);
 
   const tasksPerPage = 20;
 const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
@@ -208,10 +210,14 @@ const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
     setCurrentPage(1);
   };
 
+  const toggleForm = () => {
+    setToggleTaskForm(!toggleTaskForm);
+  };
+
   return (
     <div className='box-border h-screen flex flex-col'>
-      <div className='sticky top-0'>
-        <Header />
+      <div className='sticky top-0 z-10'>
+        <Header toggleForm={toggleForm} />
       </div>
       <div className="flex-grow overflow-y-auto">
         <StripHeader taskCount={filteredTasks.length} 
@@ -219,11 +225,18 @@ const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
           setSearchValue={setSearchValue} 
           onSearch={handleSearch} 
         />
+      <div className="relative">
         <TaskList taskToDisplay={taskToDisplay} />
       </div>
-      <div className='fixed bottom-0 p-2 border-t-2 w-full bg-gray-100'>
+      </div>
+      <div className='bottom-0 left-0 right-0 p-2 border-t-2 w-full bg-gray-100'>
         <Pagination currentPage={currentPage} totalPages={totalPages} changePage={handleChangePage} />
       </div>
+      {toggleTaskForm && (
+      <div className='flex items-center justify-center absolute inset-0 m-auto'>
+      <TaskForm toggleForm={toggleForm}/>
+      </div>
+      )}
     </div>
   );
 }
