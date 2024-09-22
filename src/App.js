@@ -19,7 +19,9 @@ const Header = ({toggleForm}) => (
     </div>
     <div className="flex space-x-4">
       <Button variant={'primary'} children={'New Task'} onClick={toggleForm} />
-      <Button variant={'ghost'}>
+      <Button variant={'ghost'} onClick={() => {
+    window.location.reload();
+  }}>
         <FcRefresh />
       </Button>
     </div>

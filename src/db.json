@@ -17,14 +17,6 @@
       "comments": "Awaiting feedback"
     },
     {
-      "assignedTo": "NEW ID W",
-      "status": "Completed",
-      "dueDate": "12/12/2024",
-      "priority": "Low",
-      "comments": "Task finished successfully",
-      "id": "3"
-    },
-    {
       "id": "4",
       "assignedTo": "user 4",
       "status": "Pending",
