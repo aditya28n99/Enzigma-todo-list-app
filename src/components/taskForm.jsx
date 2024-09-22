@@ -65,6 +65,10 @@ export default function TaskForm({ formType, toggleForm, initialTaskData, select
     });
   };
 
+  const formatDate = (dateString) => {
+    const [month, day, year] = dateString.split('/');
+    return `${year}-${month}-${day}`;
+  };
   return (
     <div className="bg-blue-100 w-3/4 border-2 z-50 p-6">
       <h2 className="text-xl mb-4 text-center border-2">
@@ -94,7 +98,7 @@ export default function TaskForm({ formType, toggleForm, initialTaskData, select
               type="date"
               name="dueDate"
               placeholder="Due Date"
-              value={taskData.dueDate || ''}
+              value={formatDate(taskData.dueDate) || ''}
               onChange={handleChange}
               className="p-2 border"
             />
